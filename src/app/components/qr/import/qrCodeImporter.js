@@ -2,15 +2,21 @@ import { useState, useEffect } from 'react';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { Button } from '@/components/ui/button';
 import { replaceObjectAtIndexImmutable } from '@/lib/helpers/arrayManipulation';
+import { decryptString } from '@/lib/encryption/browserEncryption';
+import { Input } from '@/components/ui/input';
 
 function QRCodeImporter({ setToggleShareDialog }) {
   const [cameraAvailable, setCameraAvailable] = useState(false);
-  const [scanning, setScanning] = useState(false); // State for scanning feedback
+  const [setScanning] = useState(false); // State for scanning feedback
   const [scanResult, setScanResult] = useState([]);
-  const [currentPart, setCurrentPart] = useState(1);
+  const [setCurrentPart] = useState(1);
   const [scannedCode, setScannedCode] = useState()
   const [error, setError] = useState('')
   const [scanStatus, setScanStatus] = useState({ scanned: [], total: [] })
+
+  const [completeEncryptedData, setCompleteEncryptedData] = useState("")
+  const [decryptedString, setDecryptedString] = useState("")
+  const [secretKey, setSecretKey] = useState("")
 
   useEffect(() => {
     if (error) {
@@ -81,7 +87,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
 
   const saveData = () => {
     const completeData = scanResult.join("")
-    localStorage.setItem("patients", completeData)
+    setCompleteEncryptedData(completeData)
     setToggleShareDialog(false)
   }
 
@@ -102,16 +108,25 @@ function QRCodeImporter({ setToggleShareDialog }) {
         <span className='font-bold text-lg my-2'>Progress {getPercentageScanned()}%</span>
         <small className='my-1'>The process will end when all chunks are read correctly</small>
       </div>
-      <Scanner
-        formats={["qr_code"]}
-        onScan={handleScan}
-        onError={handleError}
-        facingMode="environment"
-      />
-      <div className='flex justify-end items-center mt-2'>
-        <Button className="me-2" onClick={saveData}>Finalize</Button>
-        <Button variant="destructive" onClick={() => setToggleShareDialog(false)}>Cancel</Button>
+      {!completeEncryptedData && <>
+        <Scanner
+          formats={["qr_code"]}
+          onScan={handleScan}
+          onError={handleError}
+          facingMode="environment"
+        />
+        <div className='flex justify-end items-center mt-2'>
+          <Button className="me-2" onClick={saveData}>Finalize</Button>
+          <Button variant="destructive" onClick={() => setToggleShareDialog(false)}>Cancel</Button>
+        </div>
+      </>}
+      {completeEncryptedData && <div>
+        <p>{completeEncryptedData}</p>
+        {decryptedString && <p>{decryptedString}</p>}
+        <Input type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
+        <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
       </div>
+      }
     </div>
   );
 }

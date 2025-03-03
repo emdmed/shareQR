@@ -76,7 +76,6 @@ export default function Home() {
               </div>
               {!toggleShareDialog && encryptedData && (
                 <ExportDialog
-                  setToggleExportDialog={setToggleShareDialog}
                   encryptedData={encryptedData}
                   setEncryptedData={setEncryptedData}
                 />

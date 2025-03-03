@@ -6,7 +6,7 @@ import { useState } from "react"
 
 const ImportDialog = ({ setToggleShareDialog }) => {
 
-    const [scanData, setScanData] = useState()
+    const [setScanData] = useState()
 
     return <div>
         <Card className="">

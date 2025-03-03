@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import QRCodeDisplay from "./qrCodes"
 
-const ExportDialog = ({ setToggleExportDialog, encryptedData, setEncryptedData }) => {
+const ExportDialog = ({ encryptedData, setEncryptedData }) => {
     return <div className="flex flex-col items-center justify-center mt-5">
 
         <QRCodeDisplay encryptedData={encryptedData} />
