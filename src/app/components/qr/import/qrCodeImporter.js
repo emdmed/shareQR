@@ -91,6 +91,8 @@ function QRCodeImporter({ setToggleShareDialog }) {
     setToggleShareDialog(false)
   }
 
+  console.log("completed data", completeEncryptedData)
+
   const getPercentageScanned = () => {
     if (!scanStatus || scanStatus.scanned.length === 0) return 0
     return (100 + ((scanStatus.scanned.length - scanStatus.total) / scanStatus.total) * 100)
