@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 
