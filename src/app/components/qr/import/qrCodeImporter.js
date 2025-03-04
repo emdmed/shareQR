@@ -98,6 +98,15 @@ function QRCodeImporter({ setToggleShareDialog }) {
     //setToggleShareDialog(false)
   }
 
+  const getFileExtension = (dataUrl) => {
+    const match = dataUrl.match(/^data:(.+);base64,/);
+    if (match) {
+      const mimeType = match[1];
+      return mimeType.split('/')[1];
+    }
+    return 'txt';
+  };
+
   const downloadFile = (fileContent) => {
     const extension = getFileExtension(fileContent);
     const a = document.createElement('a');
@@ -147,7 +156,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
         <Input className='border-secondary my-2' type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
         <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
       </div>
-      {decryptString && <div className='flex'>
+      {decryptedString && <div className='flex'>
         <Button onClick={() => downloadFile(decryptedString)}>Download</Button>
       </div>}
       {completeEncryptedData && <div className="max-w-[400px]">
