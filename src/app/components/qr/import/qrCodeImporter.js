@@ -30,8 +30,6 @@ function QRCodeImporter({ setToggleShareDialog }) {
     }
   }, [error])
 
-  console.log("scanStatus", scanStatus, "scanResult", scanResult)
-
   useEffect(() => {
     if (!scannedCode) return
     const scannedCodeObject = JSON.parse(scannedCode)
@@ -150,7 +148,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
         <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
       </div>
       {decryptString && <div className='flex'>
-        <Button onClick={() => downloadFile(decryptString)}>Download</Button>
+        <Button onClick={() => downloadFile(decryptedString)}>Download</Button>
       </div>}
       {completeEncryptedData && <div className="max-w-[400px]">
         {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>}
