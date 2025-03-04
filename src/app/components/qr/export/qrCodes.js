@@ -19,7 +19,7 @@ const QRCodeDisplay = ({ encryptedData }) => {
       if (chunkedData.length === 1) return
       if (currentChunk === chunkedData.length - 1) setCurrentChunk(0)
       if (currentChunk < chunkedData.length - 1) setCurrentChunk(prev => ++prev)
-    }, 2000);
+    }, 200);
 
     if (stopInterval) clearTimeout(timer)
 
