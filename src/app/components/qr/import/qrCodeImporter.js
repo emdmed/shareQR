@@ -100,6 +100,18 @@ function QRCodeImporter({ setToggleShareDialog }) {
     //setToggleShareDialog(false)
   }
 
+  const downloadFile = (string) => {
+    const blob = new Blob([string], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'download.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   console.log("completed data", completeEncryptedData)
   console.log("scanResult", scanResult)
 
@@ -135,13 +147,14 @@ function QRCodeImporter({ setToggleShareDialog }) {
           <Button variant="destructive" onClick={() => setToggleShareDialog(false)}>Cancel</Button>
         </div>
       </div>}
+      <div className='flex items-center'>
+        <Input className='border-secondary my-2' type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
+        <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
+        <Button onClick={() => downloadFile(decryptString)}>Download</Button>
+      </div>
       {completeEncryptedData && <div className="max-w-[400px]">
         {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>}
         {decryptedString && <p>{decryptedString}</p>}
-        <div className='flex items-center'>
-          <Input className='border-secondary my-2' type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
-          <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
-        </div>
       </div>
       }
     </div>

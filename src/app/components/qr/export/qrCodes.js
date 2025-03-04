@@ -11,31 +11,19 @@ const chukedDataToObject = (chunkedData) => {
 
 const QRCodeDisplay = ({ encryptedData }) => {
   const chunkedData = chukedDataToObject(chunkData(encryptedData));
-  const [currentChunk, setCurrentChunk] = useState(0);
-  const [stopInterval, setStopInterval] = useState(false)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (chunkedData.length === 1) return
-      if (currentChunk === chunkedData.length - 1) setCurrentChunk(0)
-      if (currentChunk < chunkedData.length - 1) setCurrentChunk(prev => ++prev)
-    }, 200);
 
-    if (stopInterval) clearTimeout(timer)
 
-    return () => clearInterval(timer)
-  }, [chunkedData, currentChunk])
 
   return (
     <div className='w-full flex flex-col justify-center items-center'>
       <QRCodeChunk
-        data={JSON.stringify(chunkedData[currentChunk])}
-        index={currentChunk}
+        chunkedData={chunkedData}
         totalChunks={chunkedData.length}
       />
       <div className='flex justify-between'>
-        <Button className="w-full mx-1" onClick={() => setStopInterval(prev => !prev)}>{stopInterval ? "Start" : "Stop"}</Button>
-        {stopInterval && <>
+       {/*  <Button className="w-full mx-1" onClick={() => setStopInterval(prev => !prev)}>{stopInterval ? "Start" : "Stop"}</Button> */}
+        {/* {stopInterval && <>
           <Button
             className="mx-1"
             onClick={() => setCurrentChunk((prev) => Math.max(prev - 1, 0))}
@@ -50,7 +38,7 @@ const QRCodeDisplay = ({ encryptedData }) => {
           >
             Next
           </Button>
-        </>}
+        </>} */}
       </div>
     </div>
   );
