@@ -36,18 +36,19 @@ export default function Home() {
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event: ProgressEvent<FileReader>) => {
-        const result = event.target?.result;
-        setFileContent(result as string);
+        if (event.target?.result) {
+          setFileContent(event.target.result as string);
+        }
       };
-      reader.onerror = (err) => {
+      reader.onerror = (err: ProgressEvent<FileReader>) => {
         console.error("Error reading file:", err);
       };
-      reader.readAsText(file, "utf8");
+      reader.readAsDataURL(file);
     }
   };
 
