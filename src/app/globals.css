@@ -83,3 +83,38 @@ body * {
     @apply bg-background text-foreground;
   }
 }
+
+/* Global modern dark scrollbar styles */
+* {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: hsl(var(--primary)) hsl(var(--background));
+  /* Firefox */
+}
+
+/* Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  /* For horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+  transition: background 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* For horizontal scrollbars */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
