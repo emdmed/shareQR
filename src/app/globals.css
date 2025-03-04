@@ -118,3 +118,8 @@ body * {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+.react-qr-scanner__container video {
+  width: 100%;
+  height: auto;
+}

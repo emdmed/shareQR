@@ -121,18 +121,20 @@ function QRCodeImporter({ setToggleShareDialog }) {
         <small className='my-1'>Point the camera to the QR code and keep it steady un untill the counter reaches 100%</small>
         <small className='my-1'>The process will end when all chunks are read correctly</small>
       </div>
-      {!completeEncryptedData && <>
-        <Scanner
-          formats={["qr_code"]}
-          onScan={handleScan}
-          onError={handleError}
-          facingMode="environment"
-        />
+      {!completeEncryptedData && <div className='flex flex-col justify-center items-center'>
+        <div className='max-w-[400px]'>
+          <Scanner
+            formats={["qr_code"]}
+            onScan={handleScan}
+            onError={handleError}
+            facingMode="environment"
+          />
+        </div>
         <div className='flex justify-end items-center mt-2'>
           <Button className="me-2" onClick={saveData}>Finalize</Button>
           <Button variant="destructive" onClick={() => setToggleShareDialog(false)}>Cancel</Button>
         </div>
-      </>}
+      </div>}
       {completeEncryptedData && <div className="max-w-[400px]">
         {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>}
         {decryptedString && <p>{decryptedString}</p>}
