@@ -54,6 +54,8 @@ function QRCodeImporter({ setToggleShareDialog }) {
 
 
   useEffect(() => {
+    console.log("check", scanResult.filter(value => value).length, "scanStatus.total", scanStatus.total.length)
+
     if (scanResult.filter(value => value).length === scanStatus.total) {
       saveData()
     }
@@ -77,8 +79,13 @@ function QRCodeImporter({ setToggleShareDialog }) {
   const handleScan = (data) => {
     console.log("data scanned", data[0].rawValue)
 
-    if (data[0].rawValue) {
+    const dataScanned = JSON.parse(data[0].rawValue)
+    console.log("parsed scanned ata", dataScanned, dataScanned.total)
+
+    if (data[0].rawValue && dataScanned.total > 1) {
       setScannedCode(data[0].rawValue)
+    } else {
+      setCompleteEncryptedData(dataScanned.data)
     }
   };
 
@@ -94,6 +101,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
   }
 
   console.log("completed data", completeEncryptedData)
+  console.log("scanResult", scanResult)
 
   const getPercentageScanned = () => {
     if (!scanStatus || scanStatus.scanned.length === 0) return 0
@@ -110,6 +118,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
     <div className='flex flex-col'>
       <div className='flex flex-col'>
         <span className='font-bold text-lg my-2'>Progress {getPercentageScanned()}%</span>
+        <small className='my-1'>Point the camera to the QR code and keep it steady un untill the counter reaches 100%</small>
         <small className='my-1'>The process will end when all chunks are read correctly</small>
       </div>
       {!completeEncryptedData && <>
@@ -127,8 +136,10 @@ function QRCodeImporter({ setToggleShareDialog }) {
       {completeEncryptedData && <div className="max-w-[400px]">
         {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>}
         {decryptedString && <p>{decryptedString}</p>}
-        <Input type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
-        <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
+        <div className='flex items-center'>
+          <Input className='border-secondary my-2' type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
+          <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
+        </div>
       </div>
       }
     </div>
