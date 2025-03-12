@@ -117,15 +117,10 @@ function QRCodeImporter({ setToggleShareDialog }) {
     document.body.removeChild(a);
   };
 
-  console.log("completed data", completeEncryptedData)
-  console.log("scanResult", scanResult)
-
   const getPercentageScanned = () => {
     if (!scanStatus || scanStatus.scanned.length === 0) return 0
     return (100 + ((scanStatus.scanned.length - scanStatus.total) / scanStatus.total) * 100)
   }
-
-  console.log("getPercentageScanned", getPercentageScanned())
 
   if (!cameraAvailable) {
     return <p>No camera found.</p>;

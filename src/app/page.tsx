@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { encryptString } from "@/lib/encryption/browserEncryption";
+import { Badge } from "@/components/ui/badge";
 
 type EncryptMode = "text" | "file";
 
@@ -24,6 +25,7 @@ export default function Home() {
   const [text, setText] = useState<string>("");
   const [encryptMode, setEncrypMode] = useState<EncryptMode>("text");
   const [fileContent, setFileContent] = useState<string>("");
+  const [fileSize, setFileSize] = useState<number | null>(null);
 
   console.log("fileContent", fileContent);
 
@@ -39,6 +41,7 @@ export default function Home() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
     if (file) {
+      setFileSize(file.size);
       const reader = new FileReader();
       reader.onload = (event: ProgressEvent<FileReader>) => {
         if (event.target?.result) {
@@ -73,7 +76,7 @@ export default function Home() {
           </div>
           {!toggleShareDialog && (
             <Card className="rounded-none border-4 border-double">
-              <CardHeader>
+              {!toggleShareDialog && !encryptedData && <CardHeader>
                 <CardTitle className="flex gap-2 items-center">
                   <span>Encrypt</span>
                   <Button onClick={() => setEncrypMode("file")} size="sm">
@@ -86,8 +89,8 @@ export default function Home() {
                 <CardDescription>
                   Add the text to encrypt and generate a QR
                 </CardDescription>
-              </CardHeader>
-              <CardContent>
+              </CardHeader>}
+              {!toggleShareDialog && !encryptedData && <CardContent>
                 {encryptMode === "text" && (
                   <Textarea
                     className="border-secondary"
@@ -97,11 +100,21 @@ export default function Home() {
                   />
                 )}
                 {encryptMode === "file" && (
-                  <Input
-                    className="border-secondary"
-                    type="file"
-                    onChange={handleFileChange}
-                  />
+                  <div className="flex gap-2">
+                    <Input
+                      className="border-secondary w-2/3"
+                      type="file"
+                      onChange={handleFileChange}
+                    />
+                    {fileSize !== null && (
+                      <Badge
+                        variant="outline"
+                        className="w-1/3 border-primary text-primary"
+                      >
+                        File size: {fileSize} bytes
+                      </Badge>
+                    )}
+                  </div>
                 )}
                 <div className="flex justify-end py-2 gap-2">
                   <Input
@@ -121,6 +134,8 @@ export default function Home() {
                     Encrypt
                   </Button>
                 </div>
+              </CardContent>}
+              <CardContent>
                 {!toggleShareDialog && encryptedData && (
                   <ExportDialog
                     encryptedData={encryptedData}
