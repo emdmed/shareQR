@@ -25,9 +25,7 @@ export default function Home() {
   const [text, setText] = useState<string>("");
   const [encryptMode, setEncrypMode] = useState<EncryptMode>("text");
   const [fileContent, setFileContent] = useState<string>("");
-  const [fileSize, setFileSize] = useState<number | null>(null);
-
-  console.log("fileContent", fileContent);
+  const [fileSize, setFileSize] = useState<number>(0);
 
   const handleEncryptAction = () => {
     if (encryptMode === "text") {
@@ -57,84 +55,112 @@ export default function Home() {
 
   return (
     <div className="grid justify-items-center min-h-screen p-8">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <main className="flex flex-col row-start-2 items-center sm:items-start">
         <h1 className="text-xl font-bold">
           Share encrypted data between devices via cycling QR codes
         </h1>
+        <small className="opacity-80">
+          The secret key wil be used to encrypt/decrypt the payload
+        </small>
+
         <div className="grid w-full">
-          <div className="my-2">
+          <div className="my-1 w-full justify-between items-center flex">
+            <div className="flex justify-end items-center py-2 gap-2">
+              <span className="text-nowrap">Secret key</span>
+              <Input
+                type="password"
+                value={secretKey}
+                onChange={(e) => setSecretKey(e.target.value)}
+                placeholder="Add secret key"
+              />
+            </div>
             {!toggleShareDialog && (
-              <Button onClick={() => setToggleShareDialog(true)}>
+              <Button
+                size="sm"
+                variant="link"
+                onClick={() => setToggleShareDialog(true)}
+              >
                 Go to scan
               </Button>
             )}
             {toggleShareDialog && (
-              <Button onClick={() => setToggleShareDialog(false)}>
+              <Button
+                size="sm"
+                variant="link"
+                onClick={() => setToggleShareDialog(false)}
+              >
                 Go to generate Qr code
               </Button>
             )}
           </div>
           {!toggleShareDialog && (
             <Card className="rounded-none border-4 border-double">
-              {!toggleShareDialog && !encryptedData && <CardHeader>
-                <CardTitle className="flex gap-2 items-center">
-                  <span>Encrypt</span>
-                  <Button onClick={() => setEncrypMode("file")} size="sm">
-                    File
-                  </Button>
-                  <Button onClick={() => setEncrypMode("text")} size="sm">
-                    Text
-                  </Button>
-                </CardTitle>
-                <CardDescription>
-                  Add the text to encrypt and generate a QR
-                </CardDescription>
-              </CardHeader>}
-              {!toggleShareDialog && !encryptedData && <CardContent>
-                {encryptMode === "text" && (
-                  <Textarea
-                    className="border-secondary"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Secret message..."
-                  />
-                )}
-                {encryptMode === "file" && (
-                  <div className="flex gap-2">
-                    <Input
-                      className="border-secondary w-2/3"
-                      type="file"
-                      onChange={handleFileChange}
+              {!toggleShareDialog && !encryptedData && (
+                <CardHeader>
+                  <CardTitle className="flex gap-2 items-center">
+                    <span>Encrypt</span>
+                    <Button
+                      variant="outline"
+                      onClick={() => setEncrypMode("file")}
+                      size="sm"
+                    >
+                      File
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setEncrypMode("text")}
+                      size="sm"
+                    >
+                      Text
+                    </Button>
+                  </CardTitle>
+                  <CardDescription className="text-secondary opacity-60">
+                    Add the text/file to encrypt and generate the cycling QR codes (files below 20kb)
+                  </CardDescription>
+                </CardHeader>
+              )}
+              {!toggleShareDialog && !encryptedData && (
+                <CardContent>
+                  {encryptMode === "text" && (
+                    <Textarea
+                      className="border-secondary"
+                      value={text}
+                      onChange={(e) => setText(e.target.value)}
+                      placeholder="Secret message..."
                     />
-                    {fileSize !== null && (
-                      <Badge
-                        variant="outline"
-                        className="w-1/3 border-primary text-primary"
-                      >
-                        File size: {fileSize} bytes
-                      </Badge>
-                    )}
+                  )}
+                  {encryptMode === "file" && (
+                    <div className="flex gap-2">
+                      <Input
+                        className="border-secondary w-2/3"
+                        type="file"
+                        onChange={handleFileChange}
+                      />
+                      {fileSize !== null && (
+                        <Badge
+                          variant={fileSize > 20000 ? "destructive" : "default"}
+                          className="w-1/3"
+                        >
+                          File size: {fileSize} bytes
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                  <div className="flex justify-end w-full">
+                    <Button
+                      className="w-full mt-2"
+                      onClick={handleEncryptAction}
+                      disabled={
+                        !secretKey ||
+                        fileSize > 20000 ||
+                        (encryptMode === "text" ? !text : !fileContent)
+                      }
+                    >
+                      Encrypt
+                    </Button>
                   </div>
-                )}
-                <div className="flex justify-end py-2 gap-2">
-                  <Input
-                    className="border-secondary"
-                    type="password"
-                    value={secretKey}
-                    onChange={(e) => setSecretKey(e.target.value)}
-                    placeholder="Add secret key"
-                  />
-                  <Button
-                    onClick={handleEncryptAction}
-                    disabled={
-                      !secretKey ||
-                      (encryptMode === "text" ? !text : !fileContent)
-                    }
-                  >
-                    Encrypt
-                  </Button>
-                </div>
-              </CardContent>}
+                </CardContent>
+              )}
               <CardContent>
                 {!toggleShareDialog && encryptedData && (
                   <ExportDialog
@@ -147,7 +173,10 @@ export default function Home() {
           )}
         </div>
         {toggleShareDialog && (
-          <ImportDialog setToggleShareDialog={setToggleShareDialog} />
+          <ImportDialog
+            secretKey={secretKey}
+            setToggleShareDialog={setToggleShareDialog}
+          />
         )}
       </main>
     </div>

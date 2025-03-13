@@ -23,7 +23,8 @@
     "react-dom": "^18",
     "react-qr-code": "^2.0.15",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "undefined": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

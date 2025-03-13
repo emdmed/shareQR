@@ -46,7 +46,7 @@ body * {
   }
   .dark {
     --background: 195, 23.08%, 10.2%;
-    --foreground: 180 94.16% 73.14%;
+    --foreground: 109.41 51.52% 80.59%;
     --muted: 28 27% 13%;
     --muted-foreground: 28 7% 64%;
     --popover: 208 32% 3%;
@@ -122,4 +122,12 @@ body * {
 .react-qr-scanner__container video {
   width: 100%;
   height: auto;
+}
+
+.background{
+  background-color: #141D20;
+  opacity: 0.5;
+  background-image:  linear-gradient(#BDE7B4 2px, transparent 2px), linear-gradient(90deg, #BDE7B4 2px, transparent 2px), linear-gradient(#BDE7B4 1px, transparent 1px), linear-gradient(90deg, #BDE7B4 1px, #141D20 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
 }

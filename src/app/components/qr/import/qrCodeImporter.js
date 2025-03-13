@@ -3,9 +3,9 @@ import { Scanner } from '@yudiel/react-qr-scanner';
 import { Button } from '@/components/ui/button';
 import { replaceObjectAtIndexImmutable } from '@/lib/helpers/arrayManipulation';
 import { decryptString } from '@/lib/encryption/browserEncryption';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
-function QRCodeImporter({ setToggleShareDialog }) {
+function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
   const [cameraAvailable, setCameraAvailable] = useState(false);
   const [scanning, setScanning] = useState(false); // State for scanning feedback
   const [scanResult, setScanResult] = useState([]);
@@ -16,9 +16,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
 
   const [completeEncryptedData, setCompleteEncryptedData] = useState("")
   const [decryptedString, setDecryptedString] = useState("")
-  const [secretKey, setSecretKey] = useState("")
-
-  console.log(scanning, currentPart)
+  const [secretKey] = useState(existingSecretKey || "")
 
   useEffect(() => {
     if (error) {
@@ -52,8 +50,6 @@ function QRCodeImporter({ setToggleShareDialog }) {
 
 
   useEffect(() => {
-    console.log("check", scanResult.filter(value => value).length, "scanStatus.total", scanStatus.total.length)
-
     if (scanResult.filter(value => value).length === scanStatus.total) {
       saveData()
     }
@@ -75,10 +71,8 @@ function QRCodeImporter({ setToggleShareDialog }) {
   }, []);
 
   const handleScan = (data) => {
-    console.log("data scanned", data[0].rawValue)
 
     const dataScanned = JSON.parse(data[0].rawValue)
-    console.log("parsed scanned ata", dataScanned, dataScanned.total)
 
     if (data[0].rawValue && dataScanned.total > 1) {
       setScannedCode(data[0].rawValue)
@@ -122,6 +116,17 @@ function QRCodeImporter({ setToggleShareDialog }) {
     return (100 + ((scanStatus.scanned.length - scanStatus.total) / scanStatus.total) * 100)
   }
 
+
+  useEffect(() => {
+    console.log("completeEncryptedData", completeEncryptedData, "secretKey", secretKey, "existingSecretKey", existingSecretKey)
+    if (!completeEncryptedData || !secretKey) return
+
+
+    console.log("check", decryptString(completeEncryptedData, secretKey))
+    setDecryptedString(decryptString(completeEncryptedData, secretKey))
+
+  }, [completeEncryptedData, secretKey, existingSecretKey])
+
   if (!cameraAvailable) {
     return <p>No camera found.</p>;
   }
@@ -130,7 +135,7 @@ function QRCodeImporter({ setToggleShareDialog }) {
     <div className='flex flex-col'>
       <div className='flex flex-col'>
         <span className='font-bold text-lg my-2'>Progress {getPercentageScanned()}%</span>
-        <small className='my-1'>Point the camera to the QR code and keep it steady un untill the counter reaches 100%</small>
+        <small className='my-1'>Point the camera to the QR code and keep it steady un until the counter reaches 100%</small>
         <small className='my-1'>The process will end when all chunks are read correctly</small>
       </div>
       {!completeEncryptedData && <div className='flex flex-col justify-center items-center'>
@@ -143,22 +148,22 @@ function QRCodeImporter({ setToggleShareDialog }) {
           />
         </div>
         <div className='flex justify-end items-center mt-2'>
-          <Button className="me-2" onClick={saveData}>Finalize</Button>
+          {/*   <Button className="me-2" onClick={saveData}>Finalize</Button> */}
           <Button variant="destructive" onClick={() => setToggleShareDialog(false)}>Cancel</Button>
         </div>
       </div>}
-      <div className='flex items-center'>
-        <Input className='border-secondary my-2' type='password' value={secretKey} onChange={e => setSecretKey(e.target.value)}></Input>
-        <Button onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey))}>Decrypt</Button>
+
+
+      {completeEncryptedData && <div className="">
+        {/*         {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>} */}
+        <Textarea className='w-full' value={decryptedString || completeEncryptedData} />
+      </div>}
+      <div className='flex items-center w-full my-2'>
+        {completeEncryptedData && !decryptedString && <Button size="lg" className='w-full' disabled={!existingSecretKey} onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey || existingSecretKey))}>{existingSecretKey ? "Decrypt" : "Add secret key to decrypt"}</Button>}
       </div>
       {decryptedString && <div className='flex'>
         <Button onClick={() => downloadFile(decryptedString)}>Download</Button>
       </div>}
-      {completeEncryptedData && <div className="max-w-[400px]">
-        {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>}
-        {decryptedString && <p>{decryptedString}</p>}
-      </div>
-      }
     </div>
   );
 }
