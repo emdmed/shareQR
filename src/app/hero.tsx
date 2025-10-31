@@ -17,7 +17,7 @@ const Hero = () => {
     <div className="flex flex-col items-start space-y-4 py-12 md:py-16">
       <div className="flex items-center gap-4">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-4xl">
-          Share encrypted data between devices via cycling QR codes
+          Share encrypted data with QR codes
         </h1>
         <QrCode size={100} />
       </div>

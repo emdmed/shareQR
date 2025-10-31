@@ -58,11 +58,11 @@ export default function Home() {
   };
 
   return (
-    <div className="grid justify-items-center min-h-screen px-4 py-3 md:px-8 md:py-6 ">
-      <main className="flex flex-col row-start-2 items-center sm:items-start">
+    <div className="min-h-screen px-4 py-3 md:px-8 md:py-6 overflow-hidden">
+      <main className="flex flex-col items-center sm:items-center max-w-full justify-center">
         <Hero />
 
-        <div className="grid w-full">
+        <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
           {!encryptedData ? <div className="my-1 w-full justify-between items-center flex gap-3">
             <div className="flex justify-start items-center py-2 gap-2">
               {isMobile ? <KeyRound size={18} /> : <span className="text-nowrap">Secret key</span>}
