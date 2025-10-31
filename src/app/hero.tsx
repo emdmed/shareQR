@@ -1,6 +1,18 @@
 import { QrCode } from "lucide-react";
+import useIsMobile from "./hooks/useIsMobile";
 
 const Hero = () => {
+
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <div className="flex text-center py-6 ">
+      <h1 className="text-xl font-bold tracking-tight max-w-4xl">
+        Share encrypted data between devices via cycling QR codes
+      </h1>
+    </div>
+  }
+
   return (
     <div className="flex flex-col items-start space-y-4 py-12 md:py-16">
       <div className="flex items-center gap-4">

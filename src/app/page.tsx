@@ -16,7 +16,8 @@ import { Input } from "@/components/ui/input";
 import { encryptString } from "@/lib/encryption/browserEncryption";
 import { Badge } from "@/components/ui/badge";
 import Hero from "./hero";
-import { Camera, QrCode } from "lucide-react";
+import { Camera, KeyRound, QrCode } from "lucide-react";
+import useIsMobile from "./hooks/useIsMobile";
 
 type EncryptMode = "text" | "file";
 
@@ -28,6 +29,7 @@ export default function Home() {
   const [encryptMode, setEncrypMode] = useState<EncryptMode>("text");
   const [fileContent, setFileContent] = useState<string>("");
   const [fileSize, setFileSize] = useState<number>(0);
+  const isMobile = useIsMobile()
 
   const handleEncryptAction = () => {
     if (encryptMode === "text") {
@@ -56,15 +58,16 @@ export default function Home() {
   };
 
   return (
-    <div className="grid justify-items-center min-h-screen px-8 py-6">
+    <div className="grid justify-items-center min-h-screen px-4 py-3 md:px-8 md:py-6 ">
       <main className="flex flex-col row-start-2 items-center sm:items-start">
         <Hero />
 
         <div className="grid w-full">
-          <div className="my-1 w-full justify-between items-center flex">
-            <div className="flex justify-end items-center py-2 gap-2">
-              <span className="text-nowrap">Secret key</span>
+          <div className="my-1 w-full justify-between items-center flex gap-3">
+            <div className="flex justify-start items-center py-2 gap-2">
+              {isMobile ? <KeyRound size={18} /> : <span className="text-nowrap">Secret key</span>}
               <Input
+                className="w-full"
                 type="password"
                 value={secretKey}
                 onChange={(e) => setSecretKey(e.target.value)}
@@ -78,7 +81,7 @@ export default function Home() {
                 onClick={() => setToggleShareDialog(true)}
                 className="inline-flex items-center gap-2"
               >
-                Scan
+                {isMobile ? null : "Scan"}
                 <Camera className="w-4 h-4 -mt-0.5" />
               </Button>
             )}
@@ -97,7 +100,7 @@ export default function Home() {
           {!toggleShareDialog && (
             <Card className="rounded-none border-4 border-double p-1">
               {!toggleShareDialog && !encryptedData && (
-                <CardHeader>
+                <CardHeader >
                   <CardTitle className="flex gap-2 items-center">
                     <span>Encrypt</span>
                     <Button
@@ -115,9 +118,9 @@ export default function Home() {
                       Text
                     </Button>
                   </CardTitle>
-                  <CardDescription className="">
+                  {!isMobile && <CardDescription className="">
                     Add the text/file to encrypt and generate the cycling QR codes (files below 20kb)
-                  </CardDescription>
+                  </CardDescription>}
                 </CardHeader>
               )}
               {!toggleShareDialog && !encryptedData && (
@@ -131,20 +134,20 @@ export default function Home() {
                     />
                   )}
                   {encryptMode === "file" && (
-                    <div className="flex gap-2">
+                    <div className="flex flex-col md:flex-row items-start md:items-end gap-2">
                       <Input
-                        className="border-secondary w-2/3"
+                        className="border-secondary "
                         type="file"
                         onChange={handleFileChange}
                       />
-                      {fileSize !== null && (
+                      {fileSize ? (
                         <Badge
                           variant={fileSize > 20000 ? "destructive" : "default"}
-                          className="w-1/3"
+                          className="w-full md:w-fit text-nowrap"
                         >
                           File size: {fileSize} bytes
                         </Badge>
-                      )}
+                      ) : null}
                     </div>
                   )}
                   <div className="flex justify-end w-full">
