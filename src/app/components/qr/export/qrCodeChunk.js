@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import html2canvas from "html2canvas";
 import gifshot from "gifshot";
 import { Button } from "@/components/ui/button";
+import useIsMobile from "@/app/hooks/useIsMobile";
 
 const QRCodeChunk = ({ chunkedData, totalChunks }) => {
   const [currentChunk, setCurrentChunk] = useState(0);
@@ -11,6 +12,7 @@ const QRCodeChunk = ({ chunkedData, totalChunks }) => {
   const [isDownloadDouble, setIsDownloadDouble] = useState(false)
   const [isGeneratingGif, setIsGeneratingGif] = useState(false)
   const qrRef = useRef(null);
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (chunkedData.length <= 1 || stopInterval) return;
@@ -56,29 +58,30 @@ const QRCodeChunk = ({ chunkedData, totalChunks }) => {
     setIsGeneratingGif(false)
   };
 
+  const QR_SIZE = isMobile ? 190 : 256
+
   return (
     <div className="relative">
       <span className="font-xl font-bold">
         {currentChunk + 1} / {totalChunks} QR codes
       </span>
-      {/* Wrap the QR code elements in a container with a ref for capturing */}
-      <div ref={isDownloadDouble ? qrRef : null} id="qr-code-container" className="flex">
-        <div ref={isDownloadDouble ? null : qrRef} className="m-8">
+      <div ref={isDownloadDouble ? qrRef : null} id="qr-code-container" className="flex flex-col">
+        <div ref={isDownloadDouble ? null : qrRef} className="m-2 md:m-8">
           <QRCode
             bgColor="#F6F5F3"
             value={JSON.stringify(chunkedData[currentChunk])}
-            size={256}
+            size={QR_SIZE}
           />
         </div>
-        <div className="  m-8">
+        <div className="m-2 md:m-8">
           <QRCode
             value={JSON.stringify(chunkedData[chunkedData.length - 1 - currentChunk])}
-            size={256}
+            size={QR_SIZE}
             bgColor="#F9F8F6"
           />
         </div>
       </div>
-      <div className="flex justify-center gap-2">
+      <div className="flex flex-col md:flex-row justify-center gap-2 mt-4">
         <Button disabled={isGeneratingGif} onClick={handleDownloadGif}>Download GIF</Button>
         <Button onClick={() => setIsDownloadDouble(prev => !prev)} variant="ghost">{isDownloadDouble ? "Double QR GIF" : "Single QR GIF"}</Button>
       </div>

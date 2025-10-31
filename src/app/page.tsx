@@ -63,7 +63,7 @@ export default function Home() {
         <Hero />
 
         <div className="grid w-full">
-          <div className="my-1 w-full justify-between items-center flex gap-3">
+          {!encryptedData ? <div className="my-1 w-full justify-between items-center flex gap-3">
             <div className="flex justify-start items-center py-2 gap-2">
               {isMobile ? <KeyRound size={18} /> : <span className="text-nowrap">Secret key</span>}
               <Input
@@ -96,7 +96,7 @@ export default function Home() {
                 <QrCode className="w-4 h-4 -mt-0.5" />
               </Button>
             )}
-          </div>
+          </div> : null}
           {!toggleShareDialog && (
             <Card className="rounded-none border-4 border-double p-1">
               {!toggleShareDialog && !encryptedData && (
