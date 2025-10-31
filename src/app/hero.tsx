@@ -1,4 +1,4 @@
-import { MessageSquareText, QrCode } from "lucide-react";
+import { QrCode } from "lucide-react";
 
 const Hero = () => {
   return (
