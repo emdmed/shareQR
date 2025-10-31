@@ -22,10 +22,10 @@
   left: 0;
   bottom: 0;
   right: 0;
-  opacity: 0.36;
+  opacity: 0.12;
   background: repeating-linear-gradient(to bottom,
-          rgba(2, 2, 2, 0.05) 1px,
-          rgba(0, 0, 0, 0.7) 3px);
+      rgba(2, 2, 2, 0.05) 1px,
+      rgba(0, 0, 0, 0.7) 3px);
   z-index: 9999;
   background-size: 100% 2px;
   pointer-events: none;
@@ -65,8 +65,8 @@
   right: 0;
   opacity: 0.45;
   background: repeating-linear-gradient(to bottom,
-          rgba(2, 2, 2, 0.05) 1px,
-          rgba(14, 14, 14, 0.7) 3px);
+      rgba(2, 2, 2, 0.05) 1px,
+      rgba(14, 14, 14, 0.7) 3px);
   z-index: 9999;
   background-size: 100% 2px;
   pointer-events: none;
@@ -75,11 +75,11 @@
 /* Slight Static Noise Effect */
 @keyframes static-noise {
   0% {
-      background-position: 0 0;
+    background-position: 0 0;
   }
 
   100% {
-      background-position: 100px 100px;
+    background-position: 100px 100px;
   }
 }
 
@@ -97,15 +97,15 @@
 
 @keyframes flicker {
   0% {
-      opacity: 0.9;
+    opacity: 0.9;
   }
 
   50% {
-      opacity: 1;
+    opacity: 1;
   }
 
   100% {
-      opacity: 0.95;
+    opacity: 0.95;
   }
 }
 
@@ -115,30 +115,30 @@
 
 @keyframes screen-power-on {
   0% {
-      opacity: 0;
-      transform: scale(1, 0.8) translateY(-100%);
-      filter: brightness(30);
+    opacity: 0;
+    transform: scale(1, 0.8) translateY(-100%);
+    filter: brightness(30);
   }
 
   10% {
-      opacity: 1;
-      transform: scale(1, 0.9);
-      filter: brightness(10);
+    opacity: 1;
+    transform: scale(1, 0.9);
+    filter: brightness(10);
   }
 
   40% {
-      transform: scale(1, 1);
-      filter: brightness(1);
+    transform: scale(1, 1);
+    filter: brightness(1);
   }
 
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 }
 
 @keyframes blink {
   50% {
-      opacity: 0;
+    opacity: 0;
   }
 }
 
@@ -175,218 +175,279 @@
   0% {
     opacity: 0;
   }
+
   10% {
     opacity: 0;
   }
+
   10.1% {
     opacity: 1;
   }
+
   10.2% {
     opacity: 0;
   }
+
   20% {
     opacity: 0;
   }
+
   20.1% {
     opacity: 1;
   }
+
   20.6% {
     opacity: 0;
   }
+
   30% {
     opacity: 0;
   }
+
   30.1% {
     opacity: 1;
   }
+
   30.5% {
     opacity: 1;
   }
+
   30.6% {
     opacity: 0;
   }
+
   45% {
     opacity: 0;
   }
+
   45.1% {
     opacity: 1;
   }
+
   50% {
     opacity: 1;
   }
+
   55% {
     opacity: 1;
   }
+
   55.1% {
     opacity: 0;
   }
+
   57% {
     opacity: 0;
   }
+
   57.1% {
     opacity: 1;
   }
+
   60% {
     opacity: 1;
   }
+
   60.1% {
     opacity: 0;
   }
+
   65% {
     opacity: 0;
   }
+
   65.1% {
     opacity: 1;
   }
+
   75% {
     opacity: 1;
   }
+
   75.1% {
     opacity: 0;
   }
+
   77% {
     opacity: 0;
   }
+
   77.1% {
     opacity: 1;
   }
+
   85% {
     opacity: 1;
   }
+
   85.1% {
     opacity: 0;
   }
+
   86% {
     opacity: 0;
   }
+
   86.1% {
     opacity: 1;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @keyframes flicker-in-1 {
   0% {
     opacity: 0;
   }
+
   10% {
     opacity: 0;
   }
+
   10.1% {
     opacity: 1;
   }
+
   10.2% {
     opacity: 0;
   }
+
   20% {
     opacity: 0;
   }
+
   20.1% {
     opacity: 1;
   }
+
   20.6% {
     opacity: 0;
   }
+
   30% {
     opacity: 0;
   }
+
   30.1% {
     opacity: 1;
   }
+
   30.5% {
     opacity: 1;
   }
+
   30.6% {
     opacity: 0;
   }
+
   45% {
     opacity: 0;
   }
+
   45.1% {
     opacity: 1;
   }
+
   50% {
     opacity: 1;
   }
+
   55% {
     opacity: 1;
   }
+
   55.1% {
     opacity: 0;
   }
+
   57% {
     opacity: 0;
   }
+
   57.1% {
     opacity: 1;
   }
+
   60% {
     opacity: 1;
   }
+
   60.1% {
     opacity: 0;
   }
+
   65% {
     opacity: 0;
   }
+
   65.1% {
     opacity: 1;
   }
+
   75% {
     opacity: 1;
   }
+
   75.1% {
     opacity: 0;
   }
+
   77% {
     opacity: 0;
   }
+
   77.1% {
     opacity: 1;
   }
+
   85% {
     opacity: 1;
   }
+
   85.1% {
     opacity: 0;
   }
+
   86% {
     opacity: 0;
   }
+
   86.1% {
     opacity: 1;
   }
+
   100% {
     opacity: 1;
   }
 }
 
 * {
-scrollbar-width: thin;
-scrollbar-color: hsl(var(--primary)) hsl(var(--background));
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary)) hsl(var(--background));
 }
 
 ::-webkit-scrollbar {
-width: 8px;
-height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-background: hsl(var(--background));
-border-radius: 4px;
+  background: hsl(var(--background));
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-background: hsl(var(--primary));
-border-radius: 4px;
-transition: background 0.2s ease-in-out;
+  background: hsl(var(--primary));
+  border-radius: 4px;
+  transition: background 0.2s ease-in-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-background: hsl(var(--primary));
+  background: hsl(var(--primary));
 }
 
 ::-webkit-scrollbar-corner {
-background: transparent;
+  background: transparent;
 }

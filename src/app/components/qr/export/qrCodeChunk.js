@@ -39,7 +39,7 @@ const QRCodeChunk = ({ chunkedData, totalChunks }) => {
         gifHeight: isDownloadDouble ? 300 : 600,
         interval: cycleDelay / 1000,
       },
-      function (obj) {
+      function(obj) {
         if (!obj.error) {
           const image = obj.image;
           const link = document.createElement("a");
@@ -63,16 +63,18 @@ const QRCodeChunk = ({ chunkedData, totalChunks }) => {
       </span>
       {/* Wrap the QR code elements in a container with a ref for capturing */}
       <div ref={isDownloadDouble ? qrRef : null} id="qr-code-container" className="flex">
-        <div ref={isDownloadDouble ? null : qrRef} className="border border-white border-8 m-8">
+        <div ref={isDownloadDouble ? null : qrRef} className="m-8">
           <QRCode
+            bgColor="#F6F5F3"
             value={JSON.stringify(chunkedData[currentChunk])}
             size={256}
           />
         </div>
-        <div className="border border-white border-8 m-8">
+        <div className="  m-8">
           <QRCode
             value={JSON.stringify(chunkedData[chunkedData.length - 1 - currentChunk])}
             size={256}
+            bgColor="#F9F8F6"
           />
         </div>
       </div>

@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { encryptString } from "@/lib/encryption/browserEncryption";
 import { Badge } from "@/components/ui/badge";
+import Hero from "./hero";
+import { Camera, QrCode } from "lucide-react";
 
 type EncryptMode = "text" | "file";
 
@@ -54,14 +56,9 @@ export default function Home() {
   };
 
   return (
-    <div className="grid justify-items-center min-h-screen p-8">
+    <div className="grid justify-items-center min-h-screen px-8 py-6">
       <main className="flex flex-col row-start-2 items-center sm:items-start">
-        <h1 className="text-xl font-bold">
-          Share encrypted data between devices via cycling QR codes
-        </h1>
-        <small className="opacity-80">
-          The secret key wil be used to encrypt/decrypt the payload
-        </small>
+        <Hero />
 
         <div className="grid w-full">
           <div className="my-1 w-full justify-between items-center flex">
@@ -77,24 +74,28 @@ export default function Home() {
             {!toggleShareDialog && (
               <Button
                 size="sm"
-                variant="link"
+                variant="secondary"
                 onClick={() => setToggleShareDialog(true)}
+                className="inline-flex items-center gap-2"
               >
-                Go to scan
+                Scan
+                <Camera className="w-4 h-4 -mt-0.5" />
               </Button>
             )}
             {toggleShareDialog && (
               <Button
                 size="sm"
-                variant="link"
+                variant="secondary"
                 onClick={() => setToggleShareDialog(false)}
+                className="inline-flex items-center gap-2"
               >
-                Go to generate Qr code
+                Generate Qr code
+                <QrCode className="w-4 h-4 -mt-0.5" />
               </Button>
             )}
           </div>
           {!toggleShareDialog && (
-            <Card className="rounded-none border-4 border-double">
+            <Card className="rounded-none border-4 border-double p-1">
               {!toggleShareDialog && !encryptedData && (
                 <CardHeader>
                   <CardTitle className="flex gap-2 items-center">
@@ -114,13 +115,13 @@ export default function Home() {
                       Text
                     </Button>
                   </CardTitle>
-                  <CardDescription className="text-secondary opacity-60">
+                  <CardDescription className="">
                     Add the text/file to encrypt and generate the cycling QR codes (files below 20kb)
                   </CardDescription>
                 </CardHeader>
               )}
               {!toggleShareDialog && !encryptedData && (
-                <CardContent>
+                <CardContent className="p-2">
                   {encryptMode === "text" && (
                     <Textarea
                       className="border-secondary"
@@ -161,7 +162,7 @@ export default function Home() {
                   </div>
                 </CardContent>
               )}
-              <CardContent>
+              <CardContent className="p-1">
                 {!toggleShareDialog && encryptedData && (
                   <ExportDialog
                     encryptedData={encryptedData}
