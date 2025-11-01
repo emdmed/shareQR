@@ -8,8 +8,8 @@ const Demo = () => {
   const [isImage, setIsImage] = useState(false)
 
 
-  return <div className="flex flex-col  py-20">
-    <div className="flex items-center">
+  return <div className="flex flex-col py-20">
+    <div className="flex items-center flex-col md:flex-row">
       {isImage ? <div className="flex flex-col justify-center">
         <span className="text-lg font-bold">Scan me!</span>
         <span>Secret key: <span className="font-bold">test</span></span>
