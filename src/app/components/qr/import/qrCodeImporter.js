@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
   const [cameraAvailable, setCameraAvailable] = useState(false);
-  const [scanning, setScanning] = useState(false); // State for scanning feedback
+  const [scanning, setScanning] = useState(false);
   const [scanResult, setScanResult] = useState([]);
   const [currentPart, setCurrentPart] = useState(1);
   const [scannedCode, setScannedCode] = useState()
@@ -18,6 +18,7 @@ function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
   const [completeEncryptedData, setCompleteEncryptedData] = useState("")
   const [decryptedString, setDecryptedString] = useState("")
   const [secretKey] = useState(existingSecretKey || "")
+  const [isImage, setIsImage] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -84,13 +85,12 @@ function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
 
   const handleError = (err) => {
     console.error("QR Code Scan Error:", err);
-    setScanning(false); // Stop scanning on error
+    setScanning(false);
   };
 
   const saveData = () => {
     const completeData = scanResult.join("")
     setCompleteEncryptedData(completeData)
-    //setToggleShareDialog(false)
   }
 
   const getFileExtension = (dataUrl) => {
@@ -100,6 +100,15 @@ function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
       return mimeType.split('/')[1];
     }
     return 'txt';
+  };
+
+  const checkIfImage = (dataUrl) => {
+    const match = dataUrl.match(/^data:(.+);base64,/);
+    if (match) {
+      const mimeType = match[1];
+      return mimeType.startsWith('image/');
+    }
+    return false;
   };
 
   const downloadFile = (fileContent) => {
@@ -122,9 +131,10 @@ function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
     console.log("completeEncryptedData", completeEncryptedData, "secretKey", secretKey, "existingSecretKey", existingSecretKey)
     if (!completeEncryptedData || !secretKey) return
 
-
     console.log("check", decryptString(completeEncryptedData, secretKey))
-    setDecryptedString(decryptString(completeEncryptedData, secretKey))
+    const decrypted = decryptString(completeEncryptedData, secretKey);
+    setDecryptedString(decrypted);
+    setIsImage(checkIfImage(decrypted));
 
   }, [completeEncryptedData, secretKey, existingSecretKey])
 
@@ -149,19 +159,45 @@ function QRCodeImporter({ setToggleShareDialog, existingSecretKey }) {
           />
         </div>
         <div className='flex justify-end items-center mt-2'>
-          {/*   <Button className="me-2" onClick={saveData}>Finalize</Button> */}
           <Button variant="destructive" onClick={() => setToggleShareDialog(false)}>Cancel</Button>
         </div>
       </div>}
 
 
-      {completeEncryptedData && <div className="">
-        {/*         {!decryptedString && <p className='mb-5 text-justify break-words text-white text-sm'>{completeEncryptedData}</p>} */}
-        <Textarea className='w-full' value={decryptedString || completeEncryptedData} />
-      </div>}
-      <div className='flex items-center w-full my-2'>
-        {completeEncryptedData && !decryptedString && <Button size="lg" className='w-full' disabled={!existingSecretKey} onClick={() => setDecryptedString(decryptString(completeEncryptedData, secretKey || existingSecretKey))}>{existingSecretKey ? "Decrypt" : "Add secret key to decrypt"}</Button>}
-      </div>
+      {completeEncryptedData && (
+        <div className="">
+          {decryptedString ? (
+            <>
+              {isImage ? (
+                <div className="flex justify-center items-center p-4">
+                  <img
+                    src={decryptedString}
+                    alt="Decrypted content"
+                    className="max-w-full h-auto rounded-lg shadow-lg"
+                  />
+                </div>
+              ) : (
+                <Textarea className='w-full' value={decryptedString} readOnly />
+              )}
+            </>
+          ) : (
+            <div className='flex items-center w-full my-2'>
+              <Button
+                size="lg"
+                className='w-full'
+                disabled={!existingSecretKey}
+                onClick={() => {
+                  const decrypted = decryptString(completeEncryptedData, secretKey || existingSecretKey);
+                  setDecryptedString(decrypted);
+                  setIsImage(checkIfImage(decrypted));
+                }}
+              >
+                {existingSecretKey ? "Decrypt" : "Add secret key to decrypt"}
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
       {decryptedString && <div className='flex'>
         <Button onClick={() => downloadFile(decryptedString)}>Download</Button>
       </div>}
