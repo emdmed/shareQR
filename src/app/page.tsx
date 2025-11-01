@@ -18,8 +18,11 @@ import { Badge } from "@/components/ui/badge";
 import Hero from "./hero";
 import { Camera, KeyRound, QrCode } from "lucide-react";
 import useIsMobile from "./hooks/useIsMobile";
+import Demo from "./demo";
 
 type EncryptMode = "text" | "file";
+
+const FILE_SIZE_LIMIT = 300000
 
 export default function Home() {
   const [toggleShareDialog, setToggleShareDialog] = useState<boolean>(false);
@@ -61,7 +64,6 @@ export default function Home() {
     <div className="min-h-screen px-4 py-3 md:px-8 md:py-6 overflow-hidden">
       <main className="flex flex-col items-center sm:items-center max-w-full justify-center">
         <Hero />
-
         <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
           {!encryptedData ? <div className="my-1 w-full justify-between items-center flex gap-3">
             <div className="flex justify-start items-center py-2 gap-2">
@@ -142,7 +144,7 @@ export default function Home() {
                       />
                       {fileSize ? (
                         <Badge
-                          variant={fileSize > 20000 ? "destructive" : "default"}
+                          variant={fileSize > FILE_SIZE_LIMIT ? "destructive" : "default"}
                           className="w-full md:w-fit text-nowrap"
                         >
                           File size: {fileSize} bytes
@@ -156,7 +158,7 @@ export default function Home() {
                       onClick={handleEncryptAction}
                       disabled={
                         !secretKey ||
-                        fileSize > 20000 ||
+                        fileSize > FILE_SIZE_LIMIT ||
                         (encryptMode === "text" ? !text : !fileContent)
                       }
                     >
@@ -182,6 +184,10 @@ export default function Home() {
             setToggleShareDialog={setToggleShareDialog}
           />
         )}
+
+
+
+        <Demo />
       </main>
     </div>
   );
